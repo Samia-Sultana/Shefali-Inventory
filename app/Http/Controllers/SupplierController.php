@@ -14,7 +14,8 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        //
+        $suppliers = Supplier::all();
+        return view('createSupplier', compact('suppliers'));
     }
 
     /**
@@ -35,7 +36,21 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->all();
+        Supplier::create([
+            'name' => $input['name'],
+            'address' => $input['address'],
+            'email' => $input['email'],
+            'phone' => $input['phone'],
+            'company_name' => $input['company_name']
+        ]);
+
+
+        $notification = array(
+            'message' => 'New supplier added!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('viewSupplierPage')->with($notification);
     }
 
     /**
@@ -69,7 +84,24 @@ class SupplierController extends Controller
      */
     public function update(Request $request, Supplier $supplier)
     {
-        //
+        $id = $request->update_supplierId;
+        $input = $request->all();
+
+       $supplier =  Supplier::find($id);
+       $supplier->update([
+            'name' => $input['update_name'],
+            'address' => $input['update_address'],
+            'email' => $input['update_email'],
+            'phone' => $input['update_phone'],
+            'company_name' => $input['update_company']
+        ]);
+
+        
+        $notification = array(
+            'message' => 'Supplier updated!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('viewSupplierPage')->with($notification);
     }
 
     /**
@@ -78,8 +110,17 @@ class SupplierController extends Controller
      * @param  \App\Models\Supplier  $supplier
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Supplier $supplier)
+    public function destroy(Request $request, Supplier $supplier)
     {
-        //
+        $id = $request->supplier_id;
+        Supplier::find($id)->delete();
+        
+        
+        $notification = array(
+            'message' => 'Supplier Deleted!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('viewSupplierPage')->with($notification);
+        
     }
 }
