@@ -14,8 +14,7 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        $suppliers = Supplier::all();
-        return view('createSupplier', compact('suppliers'));
+        return view('createSupplier');
     }
 
     /**
@@ -50,7 +49,7 @@ class SupplierController extends Controller
             'message' => 'New supplier added!',
             'alert-type' => 'success'
         );
-        return redirect()->route('viewSupplierPage')->with($notification);
+        return redirect()->route('addSupplierPage')->with($notification);
     }
 
     /**
@@ -61,7 +60,8 @@ class SupplierController extends Controller
      */
     public function show(Supplier $supplier)
     {
-        //
+        $suppliers = Supplier::all();
+        return view('supplierList', compact('suppliers'));
     }
 
     /**
@@ -101,7 +101,7 @@ class SupplierController extends Controller
             'message' => 'Supplier updated!',
             'alert-type' => 'success'
         );
-        return redirect()->route('viewSupplierPage')->with($notification);
+        return redirect()->route('addSupplierPage')->with($notification);
     }
 
     /**
@@ -120,7 +120,7 @@ class SupplierController extends Controller
             'message' => 'Supplier Deleted!',
             'alert-type' => 'success'
         );
-        return redirect()->route('viewSupplierPage')->with($notification);
+        return redirect()->route('addSupplierPage')->with($notification);
         
     }
 }

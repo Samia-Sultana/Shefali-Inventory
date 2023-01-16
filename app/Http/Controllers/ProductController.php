@@ -10,8 +10,8 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
-        return view('createProduct', compact('products'));
+        
+        return view('createProduct');
     }
 
     /**
@@ -52,7 +52,7 @@ class ProductController extends Controller
             'message' => 'New Product added!',
             'alert-type' => 'success'
         );
-        return redirect()->route('viewProductPage')->with($notification);
+        return redirect()->route('addProductPage')->with($notification);
     }
 
     /**
@@ -63,7 +63,8 @@ class ProductController extends Controller
      */
     public function show(Product $Product)
     {
-        //
+        $products = Product::all();
+        return view('productList', compact('products'));
     }
 
     /**
@@ -121,7 +122,7 @@ class ProductController extends Controller
             'message' => 'Product updated!',
             'alert-type' => 'success'
         );
-        return redirect()->route('viewProductPage')->with($notification);
+        return redirect()->route('addProductPage')->with($notification);
     }
 
     /**
@@ -140,7 +141,7 @@ class ProductController extends Controller
             'message' => 'Product Deleted!',
             'alert-type' => 'success'
         );
-        return redirect()->route('viewProductPage')->with($notification);
+        return redirect()->route('addProductPage')->with($notification);
         
     }
 }

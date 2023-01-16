@@ -15,6 +15,40 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+            @role('admin')
+            <x-responsive-nav-link :href="route('viewSupplierPage')" :active="request()->routeIs('viewSupplierPage')">
+                {{ __('Supplier') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('viewProductPage')" :active="request()->routeIs('viewProductPage')">
+                {{ __('Product') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('viewPurchasePage')" :active="request()->routeIs('viewPurchasePage')">
+                {{ __('Purchase') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('viewOrderPage')" :active="request()->routeIs('viewOrderPage')">
+                {{ __('Order') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('viewOrderPage')" :active="request()->routeIs('viewOrderPage')" >
+                {{ __('Role') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('viewOrderPage')" :active="request()->routeIs('viewOrderPage')" >
+                {{ __('Permission') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('viewOrderPage')" :active="request()->routeIs('viewOrderPage')" >
+                {{ __('User') }}
+            </x-responsive-nav-link>
+            @endrole
+            @role('manager')
+            <x-responsive-nav-link :href="route('viewOrderPage')" :active="request()->routeIs('viewOrderPage')" >
+                {{ __('Sale') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('viewOrderPage')" :active="request()->routeIs('viewOrderPage')" >
+                {{ __('Stock') }}
+            </x-responsive-nav-link>
+
+            @endrole
+                      
                 </div>
             </div>
 
@@ -34,7 +68,7 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
+                        <x-dropdown-link>
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
@@ -70,6 +104,8 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+           
+           
         </div>
 
         <!-- Responsive Settings Options -->
@@ -80,7 +116,7 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <x-responsive-nav-link >
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 

@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\IndexController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,48 +26,60 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::middleware('auth','role:admin')->group(function () {
+    Route::get('/dashboard', function(){
+        return view('admin.dashboard');
+    })->name('dashboard');
 
     /* supplier CRUD */
-    Route::get('/supplier',[SupplierController::class,'index'])->middleware('auth')->name('viewSupplierPage');
-    Route::post('/supplier',[SupplierController::class,'store'])->middleware('auth')->name('addSupplier');
-    Route::post('/update/supplier',[SupplierController::class,'update'])->middleware('auth')->name('updateSupplier');
-    Route::post('/delete/supplier',[SupplierController::class,'destroy'])->middleware('auth')->name('deleteSupplier');
+    Route::get('/supplier',[SupplierController::class,'index'])->name('addSupplierPage');
+    Route::post('/supplier',[SupplierController::class,'store'])->name('addSupplier');
+    Route::get('/supplier/list',[SupplierController::class,'show'])->name('supplierList');
+    Route::post('/update/supplier',[SupplierController::class,'update'])->name('updateSupplier');
+    Route::post('/delete/supplier',[SupplierController::class,'destroy'])->name('deleteSupplier');
     /* supplier CRUD end */
 
     /* product CRUD */
-    Route::get('/product',[ProductController::class,'index'])->middleware('auth')->name('viewProductPage');
-    Route::post('/add/product',[ProductController::class,'store'])->middleware('auth')->name('addProduct');
-    Route::post('/update/product',[ProductController::class,'update'])->middleware('auth')->name('updateProduct');
-    Route::post('/delete/product',[ProductController::class,'destroy'])->middleware('auth')->name('deleteProduct');
+    Route::get('/product',[ProductController::class,'index'])->name('addProductPage');
+    Route::post('/add/product',[ProductController::class,'store'])->name('addProduct');
+    Route::get('/product/list',[ProductController::class,'show'])->name('productList');
+    Route::post('/update/product',[ProductController::class,'update'])->name('updateProduct');
+    Route::post('/delete/product',[ProductController::class,'destroy'])->name('deleteProduct');
     /* product CRUD end */
 
 
     /* purchase CRUD */
-    Route::get('/purchase',[PurchaseController::class,'index'])->middleware('auth')->name('viewPurchasePage');
-    Route::post('/add/purchase',[PurchaseController::class,'store'])->middleware('auth')->name('addPurchase');
-    Route::post('/update/purchase',[PurchaseController::class,'update'])->middleware('auth')->name('updatePurchase');
-    Route::post('/delete/purchase',[PurchaseController::class,'destroy'])->middleware('auth')->name('deletePurchase');
+    Route::get('/purchase',[PurchaseController::class,'index'])->name('viewPurchasePage');
+    Route::post('/add/purchase',[PurchaseController::class,'store'])->name('addPurchase');
+    Route::post('/update/purchase',[PurchaseController::class,'update'])->name('updatePurchase');
+    Route::post('/delete/purchase',[PurchaseController::class,'destroy'])->name('deletePurchase');
+    Route::post('/barcode',[PurchaseController::class,'generateBarcode'])->name('generateBarcode');
     /* purchase CRUD end */
 
     /* orders CRUD */
-    Route::get('/order',[OrderController::class,'index'])->middleware('auth')->name('viewOrderPage');
-    Route::post('/add/order',[OrderController::class,'store'])->middleware('auth')->name('addOrder');
-    Route::post('/update/order',[OrderController::class,'update'])->middleware('auth')->name('updateOrder');
-    Route::post('/delete/order',[OrderController::class,'destroy'])->middleware('auth')->name('deleteOrder');
+    Route::get('/order',[OrderController::class,'index'])->name('viewOrderPage');
+    Route::post('/order',[CartController::class,'addToCart'])->name('addToCart');
+    Route::post('/update-cart',[CartController::class,'updateCart'])->name('updateShoppingCart');
+    Route::post('/remove/cart/product', [CartController::class, 'removeCartProduct'])->name('removeCartProduct');
+    Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
+    Route::post('/add/order',[OrderController::class,'store'])->name('addOrder');
+    
+    //order list view
+    Route::get('/order/list',[OrderController::class,'show'])->name('orderList');
+    Route::post('/orderStatus',[OrderController::class,'statusUpdate'])->name('orderStatus');
+    Route::post('/delete/order',[OrderController::class,'destroy'])->name('deleteOrder');
+   
     /* orders CRUD end */
 
 
-    /* generate Stock report */
+    /* generate order report */
 
     /* generate sale report */
+
+    /*generate barcode */
+
+    /*end generate barcode */
+
 });
 
 require __DIR__.'/auth.php';
