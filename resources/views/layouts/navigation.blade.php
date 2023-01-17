@@ -17,35 +17,17 @@
                     </x-nav-link>
 
             @role('admin')
+            
             <x-responsive-nav-link :href="route('viewSupplierPage')" :active="request()->routeIs('viewSupplierPage')">
                 {{ __('Supplier') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('viewProductPage')" :active="request()->routeIs('viewProductPage')">
-                {{ __('Product') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('viewPurchasePage')" :active="request()->routeIs('viewPurchasePage')">
-                {{ __('Purchase') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('viewOrderPage')" :active="request()->routeIs('viewOrderPage')">
-                {{ __('Order') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('viewOrderPage')" :active="request()->routeIs('viewOrderPage')" >
-                {{ __('Role') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('viewOrderPage')" :active="request()->routeIs('viewOrderPage')" >
-                {{ __('Permission') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('viewOrderPage')" :active="request()->routeIs('viewOrderPage')" >
-                {{ __('User') }}
-            </x-responsive-nav-link>
+          
             @endrole
             @role('manager')
             <x-responsive-nav-link :href="route('viewOrderPage')" :active="request()->routeIs('viewOrderPage')" >
                 {{ __('Sale') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('viewOrderPage')" :active="request()->routeIs('viewOrderPage')" >
-                {{ __('Stock') }}
-            </x-responsive-nav-link>
+          
 
             @endrole
                       

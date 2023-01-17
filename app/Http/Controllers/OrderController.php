@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Orderdetail;
 use App\Models\Purchase;
@@ -16,11 +17,27 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $allProduct = Purchase::all();
         $orders = Order::all();
-        return view('createOrder', compact('orders', 'allProduct'));
+        
+        $subTotal = 0;
+        
+        if($request->session()->has('cart')){
+            
+            $cart = $request->session()->get('cart');
+            foreach($cart as $item){
+                $subTotal = $subTotal + ($item->price * $item->qty);
+            }
+            $grandTotal = $subTotal;
+            return view('createOrder', compact('orders', 'allProduct', 'subTotal'));
+        }
+        else{
+            
+            return view('createOrder', compact('orders', 'allProduct', 'subTotal'));
+        }
+        
     }
 
     /**
@@ -41,6 +58,11 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        $cart = $request->session()->get('cart');
+        $total = 0;
+        foreach($cart as $item){
+            $total = $total + ($item->price*$item->qty);
+        }
         $input = $request->all();
         $order = new Order();
         $order['name'] = $request->name;
@@ -50,10 +72,10 @@ class OrderController extends Controller
         $order['city'] = $request->city;
         $order['message'] = $request->message;
         $order['status'] = 'pending';
-        $order['total_amount'] = $request->total_amount;
+        $order['total_amount'] = $request->total;
         $order->save();
 
-        $cart = $request->session()->get('cart');
+        
         foreach($cart as $item){
             $orderDetail = new Orderdetail();
             $orderDetail['orderinvoice_id'] = $order['id'];
@@ -67,7 +89,7 @@ class OrderController extends Controller
             'message' => 'Order Added!',
             'alert-type' => 'success'
         );
-        return redirect()->route('viewOrderPage')->with($notification);
+        return redirect()->route('addOrderPage')->with($notification);
     }
 
     /**
@@ -114,12 +136,22 @@ class OrderController extends Controller
     public function destroy(Request $request,Order $order)
     {
         $id = $request->input('order_id');
-        DB::table('orders')->where('id',$id)->delete();
+        $order = Order::find($id);
+        if($order->status == "complete"){
+            $notification = array(
+                'message' => 'This order is completed! you can not delete it',
+                'alert-type' => 'success'
+            );
+        }
+        else{
+            DB::table('orders')->where('id',$id)->delete();
+            $notification = array(
+                'message' => 'order deleted successfully!',
+                'alert-type' => 'success'
+            );
+        }
 
-        $notification = array(
-            'message' => 'order deleted successfully!',
-            'alert-type' => 'success'
-        );
+        
 
         return redirect()->route('orderList')->with($notification);
     }
@@ -128,15 +160,17 @@ class OrderController extends Controller
         $all = $request->all();
         $id = $all['order_id'];
         $status = $all['status'];
-
+       
         if($status == "complete"){
             $purchasedProducts = DB::table('orderdetails')->where('order_id', $id)->get();
-            foreach($purchasedProducts as $product){
-                $barcode = $product->barcode;
+            foreach($purchasedProducts as $product){ 
+                $barcode = $product->barcode_no;
                 $stock = DB::table('purchases')->where('barcode', $barcode)->get();
-                $totalStock = $stock[0]->totalQty - $product->quantity ;
+         
+                $totalStock = $stock[0]->total_qty - $product->quantity ;
+                
                 DB::table('purchases')->where('barcode', $barcode)->update([
-                    'total_qty' => $totalStock
+                    'available_qty' => $totalStock
                 ]);
             }
         }
@@ -150,6 +184,6 @@ class OrderController extends Controller
         ]);
 
         return response()->json(['success'=>'Status Changed Successfully']);
-
+        
     }
 }

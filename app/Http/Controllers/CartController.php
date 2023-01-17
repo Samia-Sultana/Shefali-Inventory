@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Orderdetail;
 use App\Models\Product;
@@ -46,7 +47,7 @@ class CartController extends Controller
             'message' => 'product Added to list!',
             'alert-type' => 'success'
         );
-        return redirect()->route('viewOrderPage')->with($notification);
+        return redirect()->route('addOrderPage')->with($notification);
         
     }
 
@@ -94,14 +95,14 @@ class CartController extends Controller
                 'message' => 'Remove product!',
                 'alert-type' => 'success'
             );
-            return redirect()->route('viewOrderPage')->with($notification);
+            return redirect()->route('addOrderPage')->with($notification);
         }
         else{
             $notification = array(
                 'message' => 'No product to Remove!',
                 'alert-type' => 'success'
             );
-            return redirect()->route('viewOrderPage')->with($notification);
+            return redirect()->route('addOrderPage')->with($notification);
         }
             
         
@@ -109,27 +110,25 @@ class CartController extends Controller
 
     public function checkout(Request $request){
        
-        $phone = $request->input('phone');
-        $address = $request->input('address');
-        $city = $request->input('city');
-        $message = $request->input('message');
-        
+        $customerId = $request->customer;
+        $customer = Customer::find($customerId);
 
         //storing order in order invoice table
         $invoice = new Order();
-        $invoice['phone'] = $phone;
-        $invoice['address'] = $address;
-        $invoice['city'] = $city;
+        $invoice['phone'] = $customer['phone'];
+        $invoice['user_id'] = $customerId;
+        $invoice['address'] = $customer['address'];
+        $invoice['city'] = $customer['city'];
         $invoice['status'] = "pending";
-        $invoice['message'] = $message;
         $invoice->save();
         
-        //stroring order info in order products table
+        
         $cart = $request->session()->has('cart')? $request->session()->get('cart') : [];
         if(count($cart) > 0){
             foreach($cart as $item){
                 $orderDetail = new Orderdetail();
                 $orderDetail['order_id'] = $invoice['id'];
+                
                 $orderDetail['barcode_no'] = $item->barcode;
                 $orderDetail['quantity'] = $item->qty;
                 $orderDetail['singlePrice'] = $item->price;
@@ -144,7 +143,7 @@ class CartController extends Controller
             'alert-type' => 'success'
         );
 
-        return redirect()->route('viewOrderPage')->with($notification);
+        return redirect()->route('addOrderPage')->with($notification);
         
     }
     

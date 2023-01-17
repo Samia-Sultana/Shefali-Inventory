@@ -150,7 +150,7 @@
                             <ul>
                             <li><a href="{{route('addProductPage')}}">Add Product</a></li>
                                 <li><a href="{{route('productList')}}">Product List</a></li>
-                                <li><a href="{{route('barcode')}}">Print Barcode</a></li>
+                                <li><a href="barcode.html">Print Barcode</a></li>
                             </ul>
                         </li>
                         <li class="submenu">

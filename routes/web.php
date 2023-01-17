@@ -1,12 +1,15 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +27,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::middleware('auth', 'role:manager')->group(function(){
+    Route::get('/dashboard', function(){
+        return view('manager.dashboard');
+    })->name('dashboard');
 });
 
 Route::middleware('auth','role:admin')->group(function () {
@@ -49,16 +58,18 @@ Route::middleware('auth','role:admin')->group(function () {
 
 
     /* purchase CRUD */
-    Route::get('/purchase',[PurchaseController::class,'index'])->name('viewPurchasePage');
+    Route::get('/purchase',[PurchaseController::class,'index'])->name('addPurchasePage');
     Route::post('/add/purchase',[PurchaseController::class,'store'])->name('addPurchase');
+    Route::get('/purchase/list',[PurchaseController::class,'show'])->name('purchaseList');
     Route::post('/update/purchase',[PurchaseController::class,'update'])->name('updatePurchase');
     Route::post('/delete/purchase',[PurchaseController::class,'destroy'])->name('deletePurchase');
     Route::post('/barcode',[PurchaseController::class,'generateBarcode'])->name('generateBarcode');
     /* purchase CRUD end */
 
     /* orders CRUD */
-    Route::get('/order',[OrderController::class,'index'])->name('viewOrderPage');
+    Route::get('/order',[OrderController::class,'index'])->name('addOrderPage');
     Route::post('/order',[CartController::class,'addToCart'])->name('addToCart');
+    Route::get('/order/list',[OrderController::class,'show'])->name('orderList');
     Route::post('/update-cart',[CartController::class,'updateCart'])->name('updateShoppingCart');
     Route::post('/remove/cart/product', [CartController::class, 'removeCartProduct'])->name('removeCartProduct');
     Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
@@ -71,14 +82,32 @@ Route::middleware('auth','role:admin')->group(function () {
    
     /* orders CRUD end */
 
+    /*customer CRUD */
+    Route::post('/add/customer',[CustomerController::class,'store'])->name('addCustomer');
 
-    /* generate order report */
+    /*customer CRUD */
 
-    /* generate sale report */
+
+    /* generate report */
+    Route::get('/sale/report',[ReportController::class,'sale'])->name('saleReport');
+    Route::get('/puchase/report',[ReportController::class,'purchase'])->name('purchaseReport');
+    Route::get('/invoice/report',[ReportController::class,'invoice'])->name('invoiceReport');
+    /* generate report end*/
 
     /*generate barcode */
 
+Route::get('/barcode',[PurchaseController::class,'barcode'])->name('barcode');
+Route::post('/barcode/generate',[PurchaseController::class,'generateBarcode'])->name('generateBarcode');
     /*end generate barcode */
+
+    /*Employee */
+    Route::get('/employee',[EmployeeController::class,'index'])->name('addEmployeePage');
+    Route::post('/add/employee',[EmployeeController::class,'create'])->name('addEmployee');
+    Route::get('/role',[EmployeeController::class,'role'])->name('addRolePage');
+    Route::post('/add/role',[EmployeeController::class,'store'])->name('addRole');
+   
+
+    /*end employee */
 
 });
 

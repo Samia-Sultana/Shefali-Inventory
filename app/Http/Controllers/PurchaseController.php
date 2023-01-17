@@ -1,12 +1,16 @@
 <?php
 
+
+
 namespace App\Http\Controllers;
+
 
 use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use JetBrains\PhpStorm\Pure;
+use Picqer\Barcode\BarcodeGeneratorJPG;
 
 class PurchaseController extends Controller
 {
@@ -20,7 +24,7 @@ class PurchaseController extends Controller
         $products = Product::all();
         $suppliers = Supplier::all();
         $purchases = Purchase::all();
-        return view('createPurchase',compact('products','suppliers','purchases'));
+        return view('createPurchase', compact('products', 'suppliers', 'purchases'));
     }
 
     /**
@@ -41,27 +45,30 @@ class PurchaseController extends Controller
      */
     public function store(Request $request)
     {
-        Purchase::create([
-        'product_id' => $request->product,
-        'supplier_id'=> $request->supplier,
-        'buying_price' => $request->buyingPrice,
-        'selling_price' =>$request->sellingPrice,
-        'purchase_date' =>$request->purchaseDate,
-        'expiry_date' =>$request->expiryDate,
-        'batch_no' =>$request->batchNo,
-        'wrack_no' =>$request->wrackNo,
-        'warehouse' =>$request->warehouse,
-        'total_qty'=>$request->totalQty,
-        'available_qty' =>$request->totalQty,
-        'barcode' => $request->product . $request->supplier . $request->batchNo . $request->purchaseDate . $request->expiryDate,
+        $purchase = Purchase::create([
+            'product_id' => $request->product,
+            'supplier_id' => $request->supplier,
+            'buying_price' => $request->buyingPrice,
+            'selling_price' => $request->sellingPrice,
+            'purchase_date' => $request->purchaseDate,
+            'expiry_date' => $request->expiryDate,
+            'batch_no' => $request->batchNo,
+            'wrack_no' => $request->wrackNo,
+            'warehouse' => $request->warehouse,
+            'total_qty' => $request->totalQty,
+            'available_qty' => $request->totalQty,
+
 
         ]);
+
+        $purchase['barcode'] =  $purchase['id'] . $request->product . '_' . $request->supplier . '_' . $request->batchNo . '_' . $request->purchaseDate . '_' . $request->expiryDate;
+        $purchase->save();
 
         $notification = array(
             'message' => 'Purchase information added!',
             'alert-type' => 'success'
         );
-        return redirect()->route('viewPurchasePage')->with($notification);
+        return redirect()->route('addPurchasePage')->with($notification);
     }
 
     /**
@@ -72,7 +79,10 @@ class PurchaseController extends Controller
      */
     public function show(Purchase $purchase)
     {
-        //
+        $products = Product::all();
+        $suppliers = Supplier::all();
+        $purchases = Purchase::all();
+        return view('purchaseList', compact('products', 'suppliers', 'purchases'));
     }
 
     /**
@@ -95,30 +105,28 @@ class PurchaseController extends Controller
      */
     public function update(Request $request, Purchase $purchase)
     {
-       
+
         $purchase = Purchase::find($request->purchaseId);
         $purchase->update([
             'product_id' => $request->product,
-            'supplier_id'=> $request->supplier,
+            'supplier_id' => $request->supplier,
             'buying_price' => $request->buyingPrice,
-            'selling_price' =>$request->sellingPrice,
-            'purchase_date' =>$request->purchaseDate,
-            'expiry_date' =>$request->expiryDate,
-            'batch_no' =>$request->batchNo,
-            'wrack_no' =>$request->wrackNo,
-            'warehouse' =>$request->warehouse,
-            'total_qty'=>$request->totalQty,
-            'available_qty' =>$request->totalQty,
-            'barcode' => $request->product . '_' . $request->supplier . '_' . $request->batchNo . '_' . $request->purchaseDate . '_' . $request->expiryDate,
-            ]);
+            'selling_price' => $request->sellingPrice,
+            'purchase_date' => $request->purchaseDate,
+            'expiry_date' => $request->expiryDate,
+            'batch_no' => $request->batchNo,
+            'wrack_no' => $request->wrackNo,
+            'warehouse' => $request->warehouse,
+            'total_qty' => $request->totalQty,
+            'available_qty' => $request->totalQty,
+            'barcode' => $purchase['id'] . $request->product . '_' . $request->supplier . '_' . $request->batchNo . '_' . $request->purchaseDate . '_' . $request->expiryDate,
+        ]);
 
-            $notification = array(
-                'message' => 'Purchase information updated!',
-                'alert-type' => 'success'
-            );
-            return redirect()->route('viewPurchasePage')->with($notification);
-
-
+        $notification = array(
+            'message' => 'Purchase information updated!',
+            'alert-type' => 'success'
+        );
+        return redirect()->route('addPurchasePage')->with($notification);
     }
 
     /**
@@ -127,7 +135,7 @@ class PurchaseController extends Controller
      * @param  \App\Models\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request,Purchase $purchase)
+    public function destroy(Request $request, Purchase $purchase)
     {
         $id = $request->purchase_id;
         Purchase::find($id)->delete();
@@ -135,12 +143,21 @@ class PurchaseController extends Controller
             'message' => 'Purchase Deleted!',
             'alert-type' => 'success'
         );
-        return redirect()->route('viewPurchasePage')->with($notification);
+        return redirect()->route('addPurchasePage')->with($notification);
     }
 
-    public function generateBarcode(Request $request){
-        $purchase = Purchase::find($request->purchase_id);
-        dd($purchase);
+    public function generateBarcode(Request $request)
+    {
+        $barcode = $request->barcode;
+        $generator = new BarcodeGeneratorJPG();
+        file_put_contents('photos/barcode.jpg', $generator->getBarcode($barcode, $generator::TYPE_CODE_128));
+        return redirect()->route('barcode');
+    }
+
+
+
+    public function barcode()
+    {
         return view('barcodeGenerator');
     }
 }

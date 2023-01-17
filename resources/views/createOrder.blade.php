@@ -1,160 +1,99 @@
-<!DOCTYPE html>
-<html lang="zxx" class="js">
-
-<head>
-    <base href="./">
-    <meta charset="utf-8">
-    <meta name="author" content="Softnio">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <!-- bootstrap cdn for toastr -->
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-
-</head>
-
-<body>
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="productSlider-style2 grid-products">
-
-                    @foreach($allProduct as $item)
-                    <div class="col-12 item">
-                        <!-- start product image -->
-                        <div class="product-image col-4" style="border:2px solid red;">
-                            <!-- start product image -->
-
-                            <!-- image -->
-                            <?php
-                            $productDetail = App\Models\Product::find($item->product_id);
-                            ?>
-                            <img src="{{url('photos/'.$productDetail->thumbnail)}}" alt="image" title="product" style="height: 220px;width:220px;">
-                            <!-- End image -->
-                            </a>
-                            <!-- end product image -->
-                            <!-- Start product button -->
-                            <div class="variants add">
-                                <form action="{{route('addToCart')}}" method="POST">
-                                    @csrf
-                                    <span>Code:{{$item->barcode}}</span>
-                                    <input type="hidden" class="pro-id" value="{{$item->barcode}}" name="barcode" />
-                                    <button class="btn btn-primary btn-addto-cart cart-btn-alert btn-submit" type="submit" tabindex="0">Add</button>
-                                </form>
-                            </div>
-                            <!-- end product button -->
-                        </div>
-                        <!-- end product image -->
-
-                    </div>
-                    @endforeach
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--Body Content-->
-    <div class="container">
-        <div class="row">
-            <div class="col-8">
-                <div id="page-content">
-                    <!--Page Title-->
-                    <div class="page section-header text-center">
+<x-admin-layout>
+    <div class="page-wrapper ms-0">
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-8 col-sm-12 tabs_wrapper">
+                    <div class="page-header ">
                         <div class="page-title">
-                            <div class="wrapper">
-                                <h1 class="page-width">Your cart</h1>
-                            </div>
+                            <h4>Categories</h4>
+                            <h6>Manage your purchases</h6>
                         </div>
                     </div>
-                    <!--End Page Title-->
 
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-12 col-sm-12 col-md-8 col-lg-8 main-col cart-detail-row">
-                                <form action="#" method="post" class="cart style2">
-                                    <table class="table table-bordered">
-                                        <thead class="cart__row cart__header">
-                                            <tr class="text-center">
-                                                <th class="text-center">Price</th>
+                    <div class="tabs_container">
+                        <div class="tab_content active" data-tab="fruits">
+                            <div class="row ">
+                                @foreach($allProduct as $item)
+                                <?php
+                                $productDetail = App\Models\Product::find($item->product_id);
+                                ?>
+                                <div class="col-lg-3 col-sm-6 d-flex ">
+                                    <div class="productset flex-fill active">
+                                        <div class="productsetimg">
+                                            <img src="{{url('photos/'.$productDetail->thumbnail)}}" alt="img" style="height:150px;width:200px;">
+                                            <h6>Qty: {{$item->available_qty}}</h6>
+                                            <div class="check-product">
+                                                <form action="{{route('addToCart')}}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="barcode" id="barcode" value="{{$item->barcode}}">
+                                                    <button type="submit" class="btn btn-primary">add</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="productsetcontent">
 
-                                                <th class="text-center">Quantity</th>
+                                            <h4>{{$productDetail->name}}</h4>
+                                            <h6>SKU:{{$productDetail->sku}}</h6>
+                                            <h6>{{$item->selling_price}}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
 
-                                                <th class="text-right">Total</th>
-                                                <th class="action">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="CartBody">
-                                            @if(Session::get('cart'))
-                                            @foreach( Session::get('cart') as $product)
-                                            <tr style="text-align: center;">
-                                                <td>{{$product->price}}</td>
-                                                <td class="pro-quantity">
-                                                    <form action="#" class="display-flex">
-                                                        <input type="hidden" value="{{$product->barcode}}" id="barcode">
-                                                        <div class="d-flex flex-row justify-content-between">
-                                                            <button class="button-qty inc" type="button">
-                                                                inc</button>
-                                                            <input type="text" value="{{$product->qty}}" readonly id="prod-qty">
-                                                            <input type="hidden" value="{{$product->barcode}}" id="barcode">
-
-                                                            <button class="button-qty dec" type="button">
-                                                                dec
-                                                            </button>
-                                                        </div>
-                                                    </form>
-                                                </td>
-
-                                                <td>{{$product->price * $product->qty}}</td>
-                                                <td>
-                                                    <form action="{{route('removeCartProduct')}}" method="POST" enctype="multipart/form-data">
-                                                        @csrf
-                                                        <input type="hidden" name="barcode" value="{{$product->barcode}}">
-                                                        <button type="submit" class="remove">remove</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                            @endif
-                                        </tbody>
-
-                                    </table>
-
-
-                                </form>
                             </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-12 ">
+                    <div class="order-list">
+                        <div class="orderid">
+                            <h4>Order List</h4>
 
                         </div>
-                    </div>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-12 col-sm-12 col-md-4 col-lg-4 cart__footer">
 
-                                <div class="solid-border">
+                    </div>
+                    <div class="card card-order">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
 
                                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="{{'#update_product_'}}">
-                                        Place order
+                                        + Add Customer
                                     </button>
                                     <div class="modal fade" id="{{'update_product_'}}" tabindex="-1" role="dialog" aria-labelledby="update_product_lebel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="update_product_lebel">Billing info</h5>
+                                                    <h5 class="modal-title" id="update_product_lebel">Add Customer</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form method="POST" action="{{route('checkout')}}" class="d-flex" enctype="multipart/form-data">
+                                                    <form method="POST" action="{{route('addCustomer')}}" class="d-flex" enctype="multipart/form-data">
                                                         @csrf
                                                         <div class="p-1">
                                                             <fieldset>
                                                                 <h2 class="login-title mb-3">Billing details</h2>
-                                                               
                                                                 <div class="row">
-                                                                    
+
+                                                                    <div class="form-group col-md-6 col-lg-6 col-xl-6 required">
+                                                                        <label for="name">Name <span class="required-f">*</span></label>
+                                                                        <input name="name" value="" id="name" type="text" required>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row">
+
+                                                                    <div class="form-group col-md-6 col-lg-6 col-xl-6 required">
+                                                                        <label for="email">Email <span class="required-f">*</span></label>
+                                                                        <input name="email" value="" id="email" type="email" required>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row">
+
                                                                     <div class="form-group col-md-6 col-lg-6 col-xl-6 required">
                                                                         <label for="phone">Telephone <span class="required-f">*</span></label>
                                                                         <input name="phone" value="" id="phone" type="text" required>
@@ -165,7 +104,7 @@
 
                                                             <fieldset>
                                                                 <div class="row">
-                                                                    
+
                                                                     <div class="form-group col-md-6 col-lg-6 col-xl-6 required">
                                                                         <label for="address">Address </label>
                                                                         <input name="address" value="" id="address" type="text" required>
@@ -176,94 +115,246 @@
                                                             <fieldset>
                                                                 <div class="row">
                                                                     <div class="form-group col-md-6 col-lg-6 col-xl-6 required">
-                                                                        <label for="city">Choose City </label>
+                                                                        <label for="city">City </label>
 
-                                                                        <select name="city" id="city" required>
-                                                                            <option value="">Choose..</option>
-                                                                            <option>Dhaka</option>
-                                                                            <option>Rajshahi</option>
-                                                                            <option>Barishal</option>
-                                                                            <option>Sylhet</option>
-                                                                            <option>Kushtia</option>
-                                                                            <option>Chittagong</option>
-                                                                        </select>
+                                                                        <input type="text" name="city" id="city" required>
+
                                                                     </div>
 
-                                                                    
+
                                                                 </div>
                                                             </fieldset>
 
 
-                                                            <fieldset>
-                                                                <div class="row">
-                                                                    <div class="form-group col-md-12 col-lg-12 col-xl-12 required">
-                                                                        <label for="message">Order Notes <span class="required-f">*</span></label>
-                                                                        <textarea class="form-control resize-both" id="message" name="message" rows="3" required></textarea>
-                                                                    </div>
-                                                                </div>
-                                                            </fieldset>
+
 
                                                         </div>
                                                         <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <button type="submit" class="btn btn-primary btn-update-product">Submit</button>
-                                                </div>
+                                                            <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary btn-update-product">Submit</button>
+                                                        </div>
 
                                                     </form>
 
                                                 </div>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- Modal -->
                                 </div>
+
+
 
                             </div>
                         </div>
-                    </div>
+                        <div class="split-card">
+                        </div>
+                        @if(Session::get('cart'))
+                        <div class="card-body pt-0 cart-detail-row">
+                            <div class="totalitem">
+                                <h4>Total items : {{count(Session::get('cart'))}} </h4>
+                                <a href="javascript:void(0);">Clear all</a>
+                            </div>
+                            <div class="product-table">
 
+                                @foreach( Session::get('cart') as $product)
+                                <?php
+                                $purchaseRow = App\Models\Purchase::where('barcode', $product->barcode)->get();
+                                $productId = $purchaseRow[0]->product_id;
+                                $productInfo =  App\Models\Product::where('id', $productId)->get();
+                                ?>
+                                <ul class="product-lists">
+                                    <li>
+                                        <div class="productimg">
+                                            <div class="productimgs">
+                                                <img src="{{url('photos/' . $productInfo[0]->thumbnail)}}" alt="img" style="height:50px;width:80px;">
+                                            </div>
+                                            <div class="productcontet">
+                                                <h4>{{$productInfo[0]->name}}
+                                                    <a href="javascript:void(0);" class="ms-2" data-bs-toggle="modal" data-bs-target="#edit"><img src="{{asset('assets/img/icons/edit-5.svg')}}" alt="img"></a>
+                                                </h4>
+                                                <div class="productlinkset">
+                                                    <h5>{{$productInfo[0]->sku}}</h5>
+                                                </div>
+                                                <div class="increment-decrement">
+                                                    <div class="input-groups pro-quantity">
+
+                                                        <form action="#" class="display-flex">
+                                                            <input type="hidden" value="{{$product->barcode}}" id="barcode">
+                                                            <div class="d-flex flex-row justify-content-between">
+                                                                <button class="button-qty inc" type="button">
+                                                                    + </button>
+                                                                <input type="text" value="{{$product->qty}}" readonly id="prod-qty">
+                                                                <input type="hidden" value="{{$product->barcode}}" id="barcode">
+
+                                                                <button class="button-qty dec" type="button">
+                                                                    -
+                                                                </button>
+                                                            </div>
+                                                        </form>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>{{$purchaseRow[0]->selling_price }}</li>
+                                    <li>
+                                        <form action="{{route('removeCartProduct')}}" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            <input type="hidden" name="barcode" value="{{$product->barcode}}">
+                                            <button type="submit" class="remove"><img src="{{asset('assets/img/icons/delete-2.svg')}}" alt="img"></button>
+                                        </form>
+                                    </li>
+                                </ul>
+                                @endforeach
+
+
+                            </div>
+                        </div>
+                        @endif
+                        <div class="card-body pt-0 pb-2">
+                            <div class="setvalue">
+                                <ul>
+                                    <li>
+                                        <h5>Subtotal </h5>
+                                        <h6 id="subtotal">{{$subTotal}}</h6>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <form method="POST" action="{{route('checkout')}}" class="d-flex" enctype="multipart/form-data">
+                                                        @csrf
+                            <div class="col-lg-12">
+                                <div class="select-split ">
+                                    <div class="select-group w-100">
+                                        <?php
+                                        $customers = App\Models\Customer::all();
+                                        ?>
+                                        <select class="select" name="customer" id="customer">
+                                            @foreach($customers as $customer)
+                                            <option value="{{$customer->id}}">{{$customer->name}}</option>
+                                            @endforeach
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="btn-totallabel">
+
+                                <button type="submit">Checkout</button>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!--End Body Content-->
 
 
-    <!-------modal cdn -------------->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <!-------modal cdn end-------------->
-    <!-------toaster cdn -------------->
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"> </script>
-    <script>
-        @if(Session::has('message'))
-        var type = "{{ Session::get('alert-type','info') }}"
-        switch (type) {
-            case 'info':
-                toastr.info(" {{ Session::get('message') }} ");
-                break;
-            case 'success':
-                toastr.success(" {{ Session::get('message') }} ");
-                break;
-            case 'warning':
-                toastr.warning(" {{ Session::get('message') }} ");
-                break;
-            case 'error':
-                toastr.error(" {{ Session::get('message') }} ");
-                break;
-        }
-        @endif
-    </script>
-    <!-------end toaster cdn -------------->
+
+        <!--Body Content-->
+        <div class="container">
+            <div class="row">
+                <div class="col-8">
+                    <div id="page-content">
 
 
-    <script type="text/Javascript">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12 col-sm-12 col-md-4 col-lg-4 cart__footer">
 
-        $(".button-qty").click(function(e){
+                                    <div class="solid-border">
+
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="{{'#update_product_'}}">
+                                            Place order
+                                        </button>
+                                        <div class="modal fade" id="{{'update_product_'}}" tabindex="-1" role="dialog" aria-labelledby="update_product_lebel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="update_product_lebel">Billing info</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Modal -->
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Body Content-->
+        <script src="{{asset('assets/js/jquery-3.6.0.min.js')}}"></script>
+        <script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
+
+        <script src="{{asset('assets/js/feather.min.js')}}"></script>
+
+        <script src="{{asset('assets/js/jquery.slimscroll.min.js')}}"></script>
+
+
+
+        <script src="{{asset('assets/js/jquery.dataTables.min.js')}}"></script>
+        <script src="{{asset('assets/js/dataTables.bootstrap4.min.js')}}"></script>
+
+        <script src="{{asset('assets/plugins/select2/js/select2.min.js')}}"></script>
+
+        <script src="{{asset('assets/plugins/owlcarousel/owl.carousel.min.js')}}"></script>
+
+        <script src="{{asset('assets/plugins/sweetalert/sweetalert2.all.min.js')}}"></script>
+        <script src="{{asset('assets/plugins/sweetalert/sweetalerts.min.js')}}"></script>
+
+        <script src="{{asset('assets/js/script.js')}}"></script>
+
+        <!-------modal cdn -------------->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <!-------modal cdn end-------------->
+        <!-------toaster cdn -------------->
+        <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"> </script>
+        <script>
+            @if(Session::has('message'))
+            var type = "{{ Session::get('alert-type','info') }}"
+            switch (type) {
+                case 'info':
+                    toastr.info(" {{ Session::get('message') }} ");
+                    break;
+                case 'success':
+                    toastr.success(" {{ Session::get('message') }} ");
+                    break;
+                case 'warning':
+                    toastr.warning(" {{ Session::get('message') }} ");
+                    break;
+                case 'error':
+                    toastr.error(" {{ Session::get('message') }} ");
+                    break;
+            }
+            @endif
+        </script>
+        <!-------end toaster cdn -------------->
+
+
+        <script type="text/Javascript">
+
+            $(".button-qty").click(function(e){
 e.preventDefault();
 
 var $button = $(this);
@@ -305,9 +396,10 @@ $.ajax({
         var subTotal = cart.reduce(function(accumulator,currentItem){
             return accumulator + (currentItem.qty * currentItem.price);
         },0);
-        var grandTotal = subTotal ;
+     
         //console.log(grandTotal);
-        $button.parents(".cart-detail-row").next().find("span.money").text(subTotal);
+        $button.parents(".cart-detail-row").next().find("#subtotal").text(subTotal);
+        
         //$button.parents(".cart-detail-row").next().find("td.grand-total").text(grandTotal);
         
     }
@@ -317,9 +409,4 @@ $.ajax({
 });
 </script>
 
-
-
-</body>
-
-
-</html>
+</x-admin-layout>
