@@ -32,7 +32,9 @@
                     </div>
                 </div>
               </form>
+              <div>
               <a href="{{ url('photos/barcode.jpg') }}">Download</a>
+              </div>
 
             </div>
         </div>

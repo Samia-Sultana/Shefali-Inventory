@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Purchase;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Response;
 use JetBrains\PhpStorm\Pure;
 use Picqer\Barcode\BarcodeGeneratorJPG;
 
@@ -150,8 +151,10 @@ class PurchaseController extends Controller
     {
         $barcode = $request->barcode;
         $generator = new BarcodeGeneratorJPG();
-        file_put_contents('photos/barcode.jpg', $generator->getBarcode($barcode, $generator::TYPE_CODE_128));
-        return redirect()->route('barcode');
+        file_put_contents('photos/'. $barcode .'.jpg', $generator->getBarcode($barcode, $generator::TYPE_CODE_128));
+        $filepath = public_path('photos/'). $barcode .".jpg";
+        return Response::download($filepath);
+        
     }
 
 

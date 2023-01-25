@@ -300,28 +300,7 @@
                 </div>
             </div>
         </div>
-        <!--End Body Content-->
-        <script src="{{asset('assets/js/jquery-3.6.0.min.js')}}"></script>
-        <script src="{{asset('assets/js/bootstrap.bundle.min.js')}}"></script>
-
-        <script src="{{asset('assets/js/feather.min.js')}}"></script>
-
-        <script src="{{asset('assets/js/jquery.slimscroll.min.js')}}"></script>
-
-
-
-        <script src="{{asset('assets/js/jquery.dataTables.min.js')}}"></script>
-        <script src="{{asset('assets/js/dataTables.bootstrap4.min.js')}}"></script>
-
-        <script src="{{asset('assets/plugins/select2/js/select2.min.js')}}"></script>
-
-        <script src="{{asset('assets/plugins/owlcarousel/owl.carousel.min.js')}}"></script>
-
-        <script src="{{asset('assets/plugins/sweetalert/sweetalert2.all.min.js')}}"></script>
-        <script src="{{asset('assets/plugins/sweetalert/sweetalerts.min.js')}}"></script>
-
-        <script src="{{asset('assets/js/script.js')}}"></script>
-
+       
         <!-------modal cdn -------------->
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
