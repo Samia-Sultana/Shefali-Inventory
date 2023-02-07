@@ -12,12 +12,11 @@ class Purchase extends Model
         'product_id',
         'supplier_id',
         'buying_price',
-        'selling_price',
+        
         'purchase_date',
-        'expiry_date',
+        
         'batch_no',
-        'wrack_no',
-        'warehouse',
+        
         'total_qty',
         'available_qty',
         'barcode'

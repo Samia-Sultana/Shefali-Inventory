@@ -24,16 +24,12 @@
                                         </label>
                                     </th>
                                     <th>Product Name</th>
-                                    <th>SKU</th>
+                                    <th>Token number</th>
                                     <th>Thumbnail</th>
-                                    <th>Description</th>
-                                    <!-- <th>Category </th>
-                                        <th>Brand</th>
-                                        <th>price</th>
-                                        <th>Unit</th>
-                                        <th>Qty</th> 
-                                        <th>Created By</th>-->
-                                    <th>Status</th>
+                                    <th>Carat</th>
+                                    <th>gm/weight</th>
+                                    <th>Bangla Weight</th>
+
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -62,14 +58,15 @@
                                         <img src="{{url('photos/'. $product->thumbnail)}}" alt="product_image" height="80px" width="150px">
                                     </td>
                                     <td>
-                                        {{substr($product->description,0,100)}}
+                                        {{$product->carat}}
                                     </td>
                                     <td>
-                                        <div class="status-toggle d-flex justify-content-between align-items-center">
-                                            <input type="checkbox" id="user1" class="check">
-                                            <label for="user1" class="checktoggle">checkbox</label>
-                                        </div>
+                                        {{$product->weight}}
                                     </td>
+                                    <td>
+                                        {{$product->bangla_weight}}
+                                    </td>
+                                   
                                     <td>
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="{{'#update_product_'.$product->id}}">
                                             <img src="{{asset('assets/img/icons/edit.svg')}}" alt="img">

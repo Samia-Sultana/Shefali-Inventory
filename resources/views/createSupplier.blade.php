@@ -13,8 +13,8 @@
                         <div class="row">
                             <div class="col-lg-4 col-sm-6 col-12">
                                 <div class="form-group">
-                                    <label>Supplier Name</label>
-                                    <input type="text" name="name" id="name">
+                                    <label>Supplier Name*</label>
+                                    <input type="text" name="name" id="name" required>
                                 </div>
                             </div>
                             <div class="col-lg-4 col-sm-6 col-12">
@@ -25,15 +25,15 @@
                             </div>
                             <div class="col-lg-4 col-sm-6 col-12">
                                 <div class="form-group">
-                                    <label>Phone</label>
-                                    <input type="text" name="phone" id="phone">
+                                    <label>Phone*</label>
+                                    <input type="text" name="phone" id="phone" required>
                                 </div>
                             </div>
 
                             <div class="col-lg-12 col-12">
                                 <div class="form-group">
-                                    <label>Address</label>
-                                    <input type="text" name="address" id="address">
+                                    <label>Address*</label>
+                                    <input type="text" name="address" id="address" required>
                                 </div>
                             </div>
 

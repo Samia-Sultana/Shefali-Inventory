@@ -50,12 +50,11 @@ class PurchaseController extends Controller
             'product_id' => $request->product,
             'supplier_id' => $request->supplier,
             'buying_price' => $request->buyingPrice,
-            'selling_price' => $request->sellingPrice,
+           
             'purchase_date' => $request->purchaseDate,
-            'expiry_date' => $request->expiryDate,
+           
             'batch_no' => $request->batchNo,
-            'wrack_no' => $request->wrackNo,
-            'warehouse' => $request->warehouse,
+            
             'total_qty' => $request->totalQty,
             'available_qty' => $request->totalQty,
 

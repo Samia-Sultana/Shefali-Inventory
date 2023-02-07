@@ -44,6 +44,9 @@ class ProductController extends Controller
             'sku' => $input['sku'],
             'thumbnail' => $thumbnailImageName,
             'description' => $input['description'],
+            'carat' => $request->carat,
+            'weight' => $request->weight,
+            'bangla_weight' => $request->bangla_weight
            
         ]);
 

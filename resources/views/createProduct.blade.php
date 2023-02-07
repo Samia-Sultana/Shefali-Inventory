@@ -16,7 +16,7 @@
                             <div class="row">
                                 <div class="col-lg-6 col-sm-6 col-12">
                                     <div class="form-group">
-                                        <label for="validationServer03">Product Name</label>
+                                        <label for="validationServer03">Product Name*</label>
                                         <input type="text" class="form-control is-invalid" id="name" name="name" required>
                                         <div class="invalid-feedback"></div>
 
@@ -42,7 +42,7 @@
                                 </div> -->
                                 <div class="col-lg-6 col-sm-6 col-12">
                                     <div class="form-group">
-                                        <label for="validationServer10">SKU</label>
+                                        <label for="validationServer10">Token Number*</label>
                                         <input type="text" class="form-control is-invalid" name="sku" id="sku" required>
                                         <div class="invalid-feedback"></div>
 
@@ -50,9 +50,36 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label>Product Thumbnail</label>
+                                        <label>Product Thumbnail*</label>
 
                                         <input type="file" class="form-control" aria-label="file example" id="thumbnail" name="thumbnail" required>
+                                        <div class="invalid-feedback"></div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>gm/weight*</label>
+
+                                        <input type="text" class="form-control" aria-label="file example" id="weight" name="weight" required>
+                                        <div class="invalid-feedback"></div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Bangla weight*</label>
+
+                                        <input type="text" class="form-control" aria-label="file example" id="bangla_weight" name="bangla_weight" required>
+                                        <div class="invalid-feedback"></div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Carat*</label>
+
+                                        <input type="text" class="form-control" aria-label="file example" id="carat" name="carat" required>
                                         <div class="invalid-feedback"></div>
 
                                     </div>

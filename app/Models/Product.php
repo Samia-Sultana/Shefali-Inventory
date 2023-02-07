@@ -15,6 +15,9 @@ class Product extends Model
         'thumbnail',
         'images',
         'description',
-        'status'
+        'status',
+        'carat',
+        'weight',
+        'bangla_weight'
     ];
 }
