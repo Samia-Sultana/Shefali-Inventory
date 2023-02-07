@@ -167,10 +167,10 @@ class OrderController extends Controller
                 $barcode = $product->barcode_no;
                 $stock = DB::table('purchases')->where('barcode', $barcode)->get();
          
-                $totalStock = $stock[0]->total_qty - $product->quantity ;
+                $remainingStock = $stock[0]->available_qty - $product->quantity ;
                 
                 DB::table('purchases')->where('barcode', $barcode)->update([
-                    'available_qty' => $totalStock
+                    'available_qty' => $remainingStock
                 ]);
             }
         }
