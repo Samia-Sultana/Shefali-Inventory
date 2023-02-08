@@ -198,6 +198,7 @@
                                 <li><a href="{{route('saleReport')}}">Sales Report</a></li>
                                
                                 <li><a href="{{route('purchaseReport')}}">Purchase Report</a></li>
+                                <li><a href="{{route('inventoryReport')}}">Inventory Report</a></li>
                                 
                                 
                             </ul>

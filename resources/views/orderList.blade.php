@@ -86,7 +86,7 @@
                                         <th>Date</th>
                                         <th>Customer Name</th>
                                         <th>Order ID</th>
-                                        <th>Status</th>
+                                      
 
                                         <th>Total</th>
 
@@ -115,19 +115,7 @@
                                             {{$customer->name}}
                                         </td>
                                         <td>{{$order->id}}</td>
-                                        <td>
-                                            <form enctype="multipart/form-data" action="">
-                                                @csrf
-                                                <input type="hidden" value="{{$order->id}}" id="order_id" name="order_id" class="order_id">
-                                                <select name="status" id="status">
-                                                    <option data-display="{{$order->status}}">{{$order->status}}</option>
-                                                    <option value="pending">pending</option>
-                                                    <option value="processing">processing</option>
-                                                    <option value="complete">complete</option>
-                                                </select>
-                                                <button type="button" class="btn btn-success button-status">Submit</button>
-                                            </form>
-                                        </td>
+                                        
 
                                         <td>{{$order->total_amount}}</td>
 

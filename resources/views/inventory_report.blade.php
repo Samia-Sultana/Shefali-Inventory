@@ -4,8 +4,8 @@
             <div class="content">
                 <div class="page-header">
                     <div class="page-title">
-                        <h4>Purchase Report</h4>
-                        <h6>Manage your Purchase Report</h6>
+                        <h4>Inventory Report</h4>
+                        <h6>Manage your Inventory</h6>
                     </div>
                 </div>
 
@@ -95,8 +95,8 @@
                                         </th>
                                         <th>Product Name</th>
                                         <th>Token Number</th>
-                                        <th>Purchased amount</th>
                                         <th>Purchased Quantity</th>
+                                        <th>Available Quantity</th>
                                        
                                     </tr>
                                 </thead>
@@ -120,8 +120,9 @@
                                             <a href="javascript:void(0);">{{$product->name}}</a>
                                         </td>
                                         <td>{{$product->sku}}</td>
-                                        <td>{{$item->buying_price * $item->total_qty}}</td>
+                                       
                                         <td>{{$item->total_qty}}</td>
+                                        <td>{{$item->available_qty}}</td>
                                        
                                     </tr>
                                     @endforeach

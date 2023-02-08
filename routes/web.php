@@ -91,7 +91,7 @@ Route::middleware('auth','role:admin')->group(function () {
     /* generate report */
     Route::get('/sale/report',[ReportController::class,'sale'])->name('saleReport');
     Route::get('/puchase/report',[ReportController::class,'purchase'])->name('purchaseReport');
-    Route::get('/invoice/report',[ReportController::class,'invoice'])->name('invoiceReport');
+    Route::get('/inventory/report',[ReportController::class,'inventory'])->name('inventoryReport');
     /* generate report end*/
 
     /*generate barcode */

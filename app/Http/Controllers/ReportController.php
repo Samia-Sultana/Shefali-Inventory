@@ -19,9 +19,9 @@ class ReportController extends Controller
         return view('purchase_report', compact('purchases'));
         
     }
-    public function invoice(){
-        $orders = Order::all();
-        return view('invoice_report', compact('orders'));
+    public function inventory(){
+        $purchases = Purchase::all();
+        return view('inventory_report', compact('purchases'));
         
     }
 }

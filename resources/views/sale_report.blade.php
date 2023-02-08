@@ -81,12 +81,12 @@
                                     </th>
                                     <th>Thumbnail</th>
                                     <th>Product Name</th>
-                                    <th>SKU</th>
-                                    <th> Category</th>
+                                    <th>Token Number</th>
+                                   
                                   
                                     <th>Sold amount</th>
-                                    <th>Sold qty</th>
-                                    <th>Instock qty</th>
+                                    <th>Sold Quantity</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -114,13 +114,11 @@
                                         {{$product->name}}
                                     </td>
                                     <td>{{$product->sku}}</td>
-                                    <td>
-                                        catagory
-                                    </td>
+                                    
                                     
                                     <td>{{($item->total_qty - $item->available_qty)*$item->selling_price}}</td>
                                     <td>{{$item->total_qty - $item->available_qty}}</td>
-                                    <td>{{$item->available_qty}}</td>
+                                  
                                 </tr>
                                 @endforeach
                                 @endif

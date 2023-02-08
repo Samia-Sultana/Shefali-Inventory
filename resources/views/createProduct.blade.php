@@ -1,15 +1,15 @@
 <x-admin-layout>
 
-<div class="page-wrapper">
-            <div class="content">
-                <div class="page-header">
-                    <div class="page-title">
-                        <h4>Product Add</h4>
-                        <h6>Create new product</h6>
-                    </div>
+    <div class="page-wrapper">
+        <div class="content">
+            <div class="page-header">
+                <div class="page-title">
+                    <h4>Product Add</h4>
+                    <h6>Create new product</h6>
                 </div>
-                <form enctype="multipart/form-data" method="POST" action="{{ route('addProduct') }}" class="d-flex">
-        @csrf
+            </div>
+            <form enctype="multipart/form-data" method="POST" action="{{ route('addProduct') }}" class="d-flex">
+                @csrf
                 <div class="card">
                     <div class="card-body">
                         <form action="" class="was-validated">
@@ -57,6 +57,11 @@
 
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <!-- case image -->
+                                    <img id="showThumbnail" src="" width="100" height="100">
+
+                                </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>gm/weight*</label>
@@ -84,7 +89,7 @@
 
                                     </div>
                                 </div>
-                                
+
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label>Description</label>
@@ -93,18 +98,18 @@
                                 </div>
                                 <div class="col-lg-12">
                                     <button class="btn btn-submit me-2" type="submit">Submit</button>
-                                    
+
                                 </div>
                         </form>
                     </div>
                 </div>
-                </form>
-            </div>
-
+            </form>
         </div>
-    
 
-   
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
     <!-------modal cdn -------------->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -132,5 +137,18 @@
         }
         @endif
     </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#thumbnail').change(function(e){
+                var reader = new FileReader();
+                reader.onload = function(e){
+                    $('#showThumbnail').attr('src',e.target.result);
+                }
+                reader.readAsDataURL(e.target.files['0']);
+            });
+        });
+    </script>
 
 </x-admin-layout>
+
+

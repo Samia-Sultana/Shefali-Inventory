@@ -29,20 +29,42 @@ class ProductController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
+     * 
+     * 
      */
+
+     public function compressImage($file)
+     {
+         $image = Image::make($file);
+         $image->resize(null, 400, function ($constraint) {
+             $constraint->aspectRatio();
+         });
+        
+         $image->encode('jpg', 80);
+     
+         while (strlen($image) > 80000) {
+             $image->resize(floor($image->width() * 0.9), floor($image->height() * 0.9), function ($constraint) {
+                 $constraint->aspectRatio();
+             });
+             $image->encode('jpg', 80);
+         }
+     
+         $thumbnailImageName = 'compressed_' . time() . '.jpg';
+         $image->save('photos/' . $thumbnailImageName);
+         return $thumbnailImageName;
+     }
     public function store(Request $request)
     {
         $input = $request->all();
         if ($request->file('thumbnail')) {
-            $thumbnailImage = $request->file('thumbnail');
-            $thumbnailImageName = date('YmdHi') . $thumbnailImage->getClientOriginalName();
-            Image::make($thumbnailImage)->save('photos/'.$thumbnailImageName);
-            $save_url = 'photos/'.$thumbnailImageName;
+            $image = $request->file('thumbnail');
+            $compressedImage = $this->compressImage($image);
+              
         }
         Product::create([
             'name' => $input['name'],
             'sku' => $input['sku'],
-            'thumbnail' => $thumbnailImageName,
+            'thumbnail' => $compressedImage,
             'description' => $input['description'],
             'carat' => $request->carat,
             'weight' => $request->weight,

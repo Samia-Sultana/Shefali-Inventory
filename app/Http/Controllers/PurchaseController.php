@@ -46,6 +46,7 @@ class PurchaseController extends Controller
      */
     public function store(Request $request)
     {
+        $product = Product::find($request->product);
         $purchase = Purchase::create([
             'product_id' => $request->product,
             'supplier_id' => $request->supplier,
@@ -57,11 +58,12 @@ class PurchaseController extends Controller
             
             'total_qty' => $request->totalQty,
             'available_qty' => $request->totalQty,
+            'barcode' => $product['sku'] ,
 
 
         ]);
 
-        $purchase['barcode'] =  $purchase['id'] . $request->product . '_' . $request->supplier . '_' . $request->batchNo . '_' . $request->purchaseDate . '_' . $request->expiryDate;
+        
         $purchase->save();
 
         $notification = array(
@@ -107,19 +109,17 @@ class PurchaseController extends Controller
     {
 
         $purchase = Purchase::find($request->purchaseId);
+        $product = Product::find($request->product);
         $purchase->update([
             'product_id' => $request->product,
             'supplier_id' => $request->supplier,
             'buying_price' => $request->buyingPrice,
-            'selling_price' => $request->sellingPrice,
+           
             'purchase_date' => $request->purchaseDate,
-            'expiry_date' => $request->expiryDate,
-            'batch_no' => $request->batchNo,
-            'wrack_no' => $request->wrackNo,
-            'warehouse' => $request->warehouse,
+            
             'total_qty' => $request->totalQty,
             'available_qty' => $request->totalQty,
-            'barcode' => $purchase['id'] . $request->product . '_' . $request->supplier . '_' . $request->batchNo . '_' . $request->purchaseDate . '_' . $request->expiryDate,
+            'barcode' => $product['sku'] ,
         ]);
 
         $notification = array(
