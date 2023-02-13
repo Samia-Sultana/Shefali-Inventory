@@ -40,6 +40,24 @@ class OrderController extends Controller
         
     }
 
+    public function searchProduct(Request $request)
+    {
+        $productTokenNumber = $request->productTokenNumber;
+        $product = DB::table('purchases')
+        ->join('products', 'purchases.product_id', '=', 'products.id')
+        ->select('products.thumbnail', 'products.name', 'purchases.*')
+        ->where('barcode', $productTokenNumber)
+        ->get();
+        return response()->json(['product'=>$product[0]]);
+    }
+
+    public function searchCustomer(Request $request)
+    {
+        $customerNumber = $request->customerNumber;
+        $customer = DB::table('customers')->where('phone', $customerNumber)->get();
+        return response()->json(['customer'=>$customer]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

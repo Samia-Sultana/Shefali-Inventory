@@ -7,17 +7,19 @@ use App\Models\Order;
 use App\Models\Orderdetail;
 use App\Models\Product;
 use App\Models\Purchase;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
 
     public function addToCart(Request $request){
-        $barcode = $request->input('barcode');
+        $barcode = $request->input('product_barcode');
+        $price = $request->input('price');
         $product = Purchase::where('barcode', "=", $barcode)->get();
         $cartProduct = (object) array(
             'barcode' =>$product[0]->barcode,
-            'price' => $product[0]->selling_price,
+            'price' => $price,
             'qty' => 1
         );
         $oldCart  = $request->session()->has('cart')? $request->session()->get('cart'): null;
@@ -110,20 +112,42 @@ class CartController extends Controller
 
     public function checkout(Request $request){
        
-        $customerId = $request->customer;
-        $customer = Customer::find($customerId);
+        $customerName = $request->customer_name;
+        $customerAddress = $request->customer_address;
+        $customerPhone = $request->customer_phone;
+        $chalanNo = $request->chalan_no;
+        $customer = Customer::where('phone',$customerPhone)->get();
+        $cart = $request->session()->has('cart')? $request->session()->get('cart') : [];
+        $total = 0;
+        foreach($cart as $item){
+            $total = $total + $item->price*$item->qty;
+        }
+
+        $invoice = new Order();
+        if(count($customer) >0){
+            $invoice['user_id'] = $customer[0]->id;
+        }
+        else{
+            $newCustomer = Customer::create([
+                'name' => $customerName,
+                'address' => $customerAddress,
+                'phone' => $customerPhone
+            ]);
+            $invoice['user_id'] = $newCustomer->id;
+        }
 
         //storing order in order invoice table
-        $invoice = new Order();
-        $invoice['phone'] = $customer['phone'];
-        $invoice['user_id'] = $customerId;
-        $invoice['address'] = $customer['address'];
-        $invoice['city'] = $customer['city'];
+        
+        $invoice['phone'] = $customer[0]->phone;    
+        $invoice['address'] = $customer[0]->address;
+        $invoice['chalan_no'] = $chalanNo;
+        $invoice['date'] = Carbon::now();
+        $invoice['total_amount'] = $total;
         $invoice['status'] = "pending";
         $invoice->save();
         
         
-        $cart = $request->session()->has('cart')? $request->session()->get('cart') : [];
+        
         if(count($cart) > 0){
             foreach($cart as $item){
                 $orderDetail = new Orderdetail();

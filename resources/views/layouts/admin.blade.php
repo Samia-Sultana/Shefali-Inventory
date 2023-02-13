@@ -203,6 +203,14 @@
                                 
                             </ul>
                         </li>
+
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><img src="{{asset('assets/img/icons/product.svg')}}" alt="img"><span>
+                                    Accounts</span> <span class="menu-arrow"></span></a>
+                            <ul>
+                                <li><a href="{{route('rangeReport')}}">Report</a></li>
+                            </ul>
+                        </li>
                        
                         <li class="submenu">
                             <a href="javascript:void(0);"><img src="{{asset('assets/img/icons/product.svg')}}" alt="img"><span>

@@ -68,6 +68,8 @@ Route::middleware('auth','role:admin')->group(function () {
 
     /* orders CRUD */
     Route::get('/order',[OrderController::class,'index'])->name('addOrderPage');
+    Route::post('/search/product', [OrderController::class,'searchProduct'])->name('searchProduct');
+    Route::post('/search/customer', [OrderController::class,'searchCustomer'])->name('searchCustomer');
     Route::post('/order',[CartController::class,'addToCart'])->name('addToCart');
     Route::get('/order/list',[OrderController::class,'show'])->name('orderList');
     Route::post('/update-cart',[CartController::class,'updateCart'])->name('updateShoppingCart');
@@ -92,6 +94,8 @@ Route::middleware('auth','role:admin')->group(function () {
     Route::get('/sale/report',[ReportController::class,'sale'])->name('saleReport');
     Route::get('/puchase/report',[ReportController::class,'purchase'])->name('purchaseReport');
     Route::get('/inventory/report',[ReportController::class,'inventory'])->name('inventoryReport');
+    Route::get('/range/report',[ReportController::class,'range'])->name('rangeReport');
+    Route::post('/range/report/output',[ReportController::class,'rangeOutput'])->name('rangeSearchOutput');
     /* generate report end*/
 
     /*generate barcode */
