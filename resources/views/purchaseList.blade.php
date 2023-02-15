@@ -44,15 +44,15 @@
                                         </label>
                                     </th>
                                     <th>Product Name</th>
+                                    <th>Token Number</th>
                                     <th>Supplier Name</th>
                                     <th>Purchase Date</th>
-                                    <th>Expiry Date</th>
+                                   
                                     <th>Buying Price</th>
-                                    <th>Selling Price</th>
+                           
                                     <th>Total qty</th>
                                     <th>Batch No</th>
-                                    <th>Rack No</th>
-                                    <th>Warehouse</th>
+     
 
                                     <th>Barcode</th>
                                     <!-- <th>Payment Status</th> -->
@@ -71,26 +71,44 @@
                                     </td>
 
                                     <td class="text-bolds">
-                                        <?php
+                                    <?php
+                                        try {
+                                            $product = App\Models\Product::findOrFail($purchase->product_id);
+                                            
+                                        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                                            $product = new stdClass();
+                                            $product->name = null;
+                                            $product->sku = null;
+                                        }
 
-                                        $product = App\Models\Product::find($purchase->product_id);
+                                        
                                         ?>
                                         {{$product->name}}
                                     </td>
                                     <td class="text-bolds">
+                                       
+                                        {{$product->sku}}
+                                    </td>
+                                    <td class="text-bolds">
                                         <?php
-                                        $supplier = App\Models\Supplier::find($purchase->supplier_id);
+                                         try {
+                                            $supplier = App\Models\Supplier::findOrFail($purchase->supplier_id);
+                                            
+                                        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                                            $supplier = new stdClass();
+                                            $supplier->name = null;
+                                        }
+                                        
                                         ?>
                                         {{$supplier->name}}
                                     </td>
                                     <td>{{$purchase->purchase_date}}</td>
-                                    <td>{{$purchase->expiry_date}}</td>
+                
                                     <td>{{$purchase->buying_price}}</td>
-                                    <td>{{$purchase->selling_price}}</td>
+                         
                                     <td>{{$purchase->total_qty}}</td>
                                     <td>{{$purchase->batch_no}}</td>
-                                    <td>{{$purchase->wrack_no}}</td>
-                                    <td>{{$purchase->warehouse}}</td>
+                                 
 
                                     <td>{{$purchase->barcode}}</td>
 
@@ -113,19 +131,36 @@
                                                             <div class="p-1">
                                                                 <select name="product" id="product">
                                                                     <?php
-                                                                    $productDetail = App\Models\Product::find($purchase->product_id);
+                                                                     try {
+                                                                        $productDetail = App\Models\Product::findOrFail($purchase->product_id);
+                                                                        
+                                                                    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                                                                        $productDetail = new stdClass();
+                                                                        $productDetail->name = null;
+                                                                        $productDetail->sku = null;
+                                                                    }
+                            
+                                                                    
                                                                     ?>
-                                                                    <option value="{{$purchase->product_id}}">{{$productDetail->name}}-{{$productDetail->sku}}</option>
+                                                                    <option value="{{$purchase->product_id}}">{{$productDetail->name}}{{$productDetail->sku}}</option>
                                                                     @if($products)
                                                                     @foreach($products as $product)
-                                                                    <option value="{{$product->id}}">{{$product->name}}-{{$product->sku}}</option>
+                                                                    <option value="{{$product->id}}">{{$product->name}}{{$product->sku}}</option>
                                                                     @endforeach
                                                                     @endif
 
                                                                 </select>
                                                                 <select name="supplier" id="supplier">
                                                                     <?php
-                                                                    $supplierDetail = App\Models\Supplier::find($purchase->supplier_id);
+                                                                    try {
+                                                                        $supplierDetail = App\Models\Supplier::findOrFail($purchase->supplier_id);
+                                                                        
+                                                                    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                                                                        $supplierDetail = new stdClass();
+                                                                        $supplierDetail->name = null;
+                                                                   
+                                                                    }
+                                                                    
                                                                     ?>
                                                                     <option value="{{$purchase->supplier_id}}">{{$supplierDetail->name}}</option>
                                                                     @if($suppliers)
@@ -137,12 +172,11 @@
                                                                 </select>
                                                                 <input type="hidden" id="purchaseId" name="purchaseId" value="{{$purchase->id}}"></br></br>
                                                                 <input type="text" id="buyingPrice" name="buyingPrice" value="{{$purchase->buying_price}}"></br></br>
-                                                                <input type="text" id="sellingPrice" name="sellingPrice" value="{{$purchase->selling_price}}"></br></br>
+                                                               
                                                                 <input type="date" id="purchaseDate" name="purchaseDate" value="{{$purchase->purchase_date}}"></br></br>
-                                                                <input type="date" id="expiryDate" name="expiryDate" value="{{$purchase->expiry_date}}"></br></br>
+                                                                
                                                                 <input type="text" id="batchNo" name="batchNo" value="{{$purchase->batch_no}}"></br></br>
-                                                                <input type="text" id="wrackNo" name="wrackNo" value="{{$purchase->wrack_no}}"></br></br>
-                                                                <input type="text" id="warehouse" name="warehouse" value="{{$purchase->warehouse}}"></br></br>
+                                                             
                                                                 <input type="text" id="totalQty" name="totalQty" value="{{$purchase->total_qty}}"></br></br>
 
                                                             </div>

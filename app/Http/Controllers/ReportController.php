@@ -28,7 +28,8 @@ class ReportController extends Controller
     }
     public function range(){
         $orders = array();
-        return view('range_report', compact('orders'));
+        $total_sales = 0;
+        return view('range_report', compact('orders','total_sales'));
         
     }
 
@@ -37,8 +38,12 @@ class ReportController extends Controller
         $end = $request->range_end;
         
         $orders = DB::table('orders')->whereBetween('date', [$start, $end])->get();
+        $total_sales = 0;
+        foreach($orders as $order){
+            $total_sales = $total_sales + $order->total_amount;
+        }
        
-        return redirect()->back()->with(['orders' => json_encode($orders)]);
+        return view('range_report', compact('orders' ,'total_sales'));
         
     }
 }

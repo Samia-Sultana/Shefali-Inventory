@@ -14,11 +14,9 @@
                 </form>
                 <div class="row d-flex flex-row justify-content-around mt-6">
                     <div class="col-md-4" style="background-color: gray; height:80px; ">
-                        <h3 style="color:white">Sales amount:</h3>
+                        <h3 style="color:white">Sales amount: BDT-{{$total_sales}}</h3>
                     </div>
-                    <div class="col-md-4" style="background-color: gray; height:80px; ">
-                    <h3 style="color:white">Purchase amount:</h3>
-                    </div>
+                    
 
 
                 </div>
@@ -118,7 +116,7 @@
                                 <tbody>
                                
                                     @if($orders)
-                                   
+                                  
                                     @foreach($orders as $order)
                                     <tr>
                                         <td>
@@ -128,6 +126,7 @@
                                             </label>
                                         </td>
                                         <td>
+                                           
                                             {{$order->date}}
                                         </td>
                                         <td>
@@ -299,34 +298,6 @@
     </script>
     <!-------end toaster cdn -------------->
 
-
-    <script type="text/Javascript">
-        $(".button-status").click(function(e){
-e.preventDefault();
-
-var $button = $(this);
-var status = $button.parent().find("select").val();
-var order_id = $button.parent().find("input.order_id").val();
-console.log(status,order_id);
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
-
-$.ajax({
-            type:'POST',
-            url:"{{ route('orderStatus') }}",
-            data:{order_id:order_id, status:status},
-            success:function(data){
-                
-                toastr.success(data.success);
-            }
-        });
-
-
-});
-</script>
 
 
 </x-admin-layout>

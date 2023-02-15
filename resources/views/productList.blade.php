@@ -88,7 +88,11 @@
                                                                 <input type="text" id="update_name" name="update_name" value="{{$product->name}}"><br><br>
                                                                 <input type="text" id="update_sku" name="update_sku" value="{{$product->sku}}"><br><br>
                                                                 <input type="file" id="update_thumbnail" name="update_thumbnail"><br><br>
-                                                                <textarea class="form-control" type="text" id="update_description" name="update_description">{{$product->description}} </textarea></br></br>
+                                                                <input type="text" id="update_carat" name="update_carat" value="{{$product->carat}}"><br><br>
+                                                                <input type="text" id="update_weight" name="update_weight" value="{{$product->weight}}"><br><br>
+                                                                <input type="text" id="update_bangla_weight" name="update_bangla_weight" value="{{$product->bangla_weight}}"><br><br>
+                                                                
+                                                                
 
                                                             </div>
                                                             <div class="modal-footer">

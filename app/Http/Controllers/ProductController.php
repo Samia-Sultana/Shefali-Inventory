@@ -127,7 +127,9 @@ class ProductController extends Controller
             'name' => $input['update_name'],
             'sku' => $input['update_sku'],
             'thumbnail' => $thumbnailImageName,
-            'description' => $input['update_description'],
+            'carat' => $input['update_carat'],
+            'weight' => $input['update_weight'],
+            'bangla_weight' => $input['update_bangla_weight'],
             
         ]);
 
@@ -137,7 +139,9 @@ class ProductController extends Controller
         $product->update([
             'name' => $input['update_name'],
             'sku' => $input['update_sku'],
-            'description' => $input['update_description'],
+            'carat' => $input['update_carat'],
+            'weight' => $input['update_weight'],
+            'bangla_weight' => $input['update_bangla_weight'],
             
         ]);
 
