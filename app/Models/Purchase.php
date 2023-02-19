@@ -19,6 +19,12 @@ class Purchase extends Model
         
         'total_qty',
         'available_qty',
-        'barcode'
+        'barcode',
+        'carat',
+        'weight',
+        'bangla_weight',
+        'name',
+        'sku',
+        'thumbnail'
     ];
 }
