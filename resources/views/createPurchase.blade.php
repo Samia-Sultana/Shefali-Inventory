@@ -79,16 +79,16 @@
                                     <input type="text" name="token[]">
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-sm-6 col-12">
+                            <div class="col-lg-6 col-sm-6 col-12 thumbnail-section">
                                 <div class="form-group">
                                     <label>Product Thumbnail*</label>
-                                    <input type="file" class="form-control" aria-label="file example" id="thumbnail" name="thumbnail[]" required="">
+                                    <input type="file" class="form-control" aria-label="file example" id="thumbnail" name="thumbnail[]" required="" onchange="previewImage(this)">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-sm-6 col-12">
                                 <div class="form-group">
                                     <!-- case image -->
-                                    <img id="showThumbnail" src="" width="100" height="100">
+                                    <img class="preview-image" id="showThumbnail" src="" width="100" height="100">
 
                                 </div>
                             </div>
@@ -165,12 +165,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"> </script>
 
     <script>
+         function previewImage(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        $(input).parents(".thumbnail-section").siblings().find('.preview-image').attr('src', e.target.result);;
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
         $(document).ready(function() {
+
+           
+
             $('#add-more-button').click(function() {
 
                 var productInformation = $('#product-information-container .product-information:first').clone();
                 console.log(productInformation);
                 $(productInformation).find('input').val('');
+                $(productInformation).find('.preview-image').attr('src', '');
                 $('#product-information-container').append(productInformation);
             });
         });

@@ -89,11 +89,12 @@ class PurchaseController extends Controller
     
             if ($thumbnails[$key]) {
                 $image = $thumbnails[$key];
-                $compressedImage = $this->compressImage($image);
                 
+                $compressedImage = $this->compressImage($image);
+                $product->thumbnail = $compressedImage;
                 
             }
-            $product->thumbnail = $compressedImage;
+            
             $product->save();
 
             $purchase = Purchase::create([
